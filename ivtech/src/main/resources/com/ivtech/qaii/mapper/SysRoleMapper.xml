@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ivtech.qaii.mapper.SysRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.ivtech.qaii.pojo.SysRole" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="available" property="available" jdbcType="BIT" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="role" property="role" jdbcType="VARCHAR" />
+
+      <collection property="permissions"  javaType="ArrayList" ofType="com.ivtech.qaii.pojo.SysPermission">
+        <id column="ids" property="id" jdbcType="INTEGER" />
+        <result column="available" property="available" jdbcType="BIT" />
+        <result column="names" property="name" jdbcType="VARCHAR" />
+        <result column="number_sort" property="numberSort" jdbcType="TIMESTAMP" />
+        <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+        <result column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
+        <result column="permission" property="permission" jdbcType="VARCHAR" />
+        <result column="resource_type" property="resourceType" jdbcType="CHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+      </collection>
+
+    <collection property="userInfos" javaType="ArrayList" ofType="com.ivtech.qaii.pojo.UserInfo">
+      <id column="uid" property="uid" jdbcType="INTEGER" />
+      <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="password" property="password" jdbcType="VARCHAR" />
+      <result column="phone" property="phone" jdbcType="VARCHAR" />
+      <result column="reason" property="reason" jdbcType="VARCHAR" />
+      <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+      <result column="salt" property="salt" jdbcType="VARCHAR" />
+      <result column="state" property="state" jdbcType="INTEGER" />
+      <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+      <result column="username" property="username" jdbcType="VARCHAR" />
+
+      <collection property="roleList" ofType="com.ivtech.qaii.pojo.SysRole">
+        <id column="id" property="id"/>
+        <result column="available" property="available" jdbcType="BIT" />
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="role" property="role" jdbcType="VARCHAR" />
+      </collection>
+    </collection>
+
+
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, available, description, role
+  </sql>
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+   select r.*,u.*,t.* ,t.id as ids,t.name as names,t.available as availables from  sys_role r left join sys_role_permission p on r.id=p.role_id
+    left join sys_permission t on p.permission_id=t.id
+    left join sys_user_role su on r.id=su.role_id
+    left join user_info u on su.uid=u.uid
+    where r.id= #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="findAll" resultMap="BaseResultMap">
+    select * from sys_role
+  </select>
+  <select id="findByRole" resultMap="BaseResultMap">
+    select r.* from  sys_role
+    where role= #{role,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_role
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="save" parameterType="com.ivtech.qaii.pojo.SysRole" >
+    insert into sys_role_permission (role_id,permission_id)
+    values <foreach collection="record.permissions" item="item" index="index">
+    (#{record.id,jdbcType=INTEGER}, #{item.id,jdbcType=INTEGER})
+  </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.ivtech.qaii.pojo.SysRole" >
+    insert into sys_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="available != null" >
+        available,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="role != null" >
+        role,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="available != null" >
+        #{available,jdbcType=BIT},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ivtech.qaii.pojo.SysRole" >
+    update sys_role
+    <set >
+      <if test="available != null" >
+        available = #{available,jdbcType=BIT},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        role = #{role,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateRole" parameterType="com.ivtech.qaii.pojo.SysRole" >
+    update sys_role
+    set available = #{available,jdbcType=BIT},
+      description = #{description,jdbcType=VARCHAR},
+      role = #{role,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateState" parameterType="com.ivtech.qaii.pojo.SysRole">
+    update sys_role
+    set available = #{available,jdbcType=BIT},
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
