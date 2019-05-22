@@ -30,11 +30,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="save" parameterType="com.ivtech.qaii.pojo.SysPermission" >
-    insert into sys_permission (id, available, name, 
+    insert into sys_permission (available, name,
       number_sort, parent_id, parent_ids, 
       permission, resource_type, url
       )
-    values (#{id,jdbcType=INTEGER}, #{available,jdbcType=BIT}, #{name,jdbcType=VARCHAR}, 
+    values (#{available,jdbcType=BIT}, #{name,jdbcType=VARCHAR},
       #{numberSort,jdbcType=TIMESTAMP}, #{parentId,jdbcType=BIGINT}, #{parentIds,jdbcType=VARCHAR}, 
       #{permission,jdbcType=VARCHAR}, #{resourceType,jdbcType=CHAR}, #{url,jdbcType=VARCHAR}
       )

@@ -78,7 +78,7 @@ $(document).ready(function(){
 });
 
 function changeValidateCode() {
-    var timestamp  =  "?data=" + new Date() + Math.floor( Math.random()*24 );
+    //var timestamp  =  "?data=" + new Date() + Math.floor( Math.random()*24 );
     $("#randImg").attr('src','../login/getGifCode');
 }
 function newPrompt(msg){

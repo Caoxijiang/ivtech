@@ -7,7 +7,7 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="role" property="role" jdbcType="VARCHAR" />
 
-      <collection property="permissions"  javaType="ArrayList" ofType="com.ivtech.qaii.pojo.SysPermission">
+      <collection property="permissions"  javaType="ArrayList" ofType="com.ivtech.qaii.pojo.SysPermission" autoMapping="true">
         <id column="ids" property="id" jdbcType="INTEGER" />
         <result column="available" property="available" jdbcType="BIT" />
         <result column="names" property="name" jdbcType="VARCHAR" />
@@ -33,7 +33,7 @@
       <result column="username" property="username" jdbcType="VARCHAR" />
 
       <collection property="roleList" ofType="com.ivtech.qaii.pojo.SysRole">
-        <id column="id" property="id"/>
+        <id column="ida" property="id"/>
         <result column="available" property="available" jdbcType="BIT" />
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="role" property="role" jdbcType="VARCHAR" />
@@ -44,7 +44,7 @@
 
   </resultMap>
   <sql id="Base_Column_List" >
-    id, available, description, role
+    id, available, description, role,permissions
   </sql>
   <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
    select r.*,u.*,t.* ,t.id as ids,t.name as names,t.available as availables from  sys_role r left join sys_role_permission p on r.id=p.role_id
@@ -57,19 +57,17 @@
     select * from sys_role
   </select>
   <select id="findByRole" resultMap="BaseResultMap">
-    select r.* from  sys_role
+    select * from  sys_role
     where role= #{role,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from sys_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="save" parameterType="com.ivtech.qaii.pojo.SysRole" >
-    insert into sys_role_permission (role_id,permission_id)
-    values <foreach collection="record.permissions" item="item" index="index">
-    (#{record.id,jdbcType=INTEGER}, #{item.id,jdbcType=INTEGER})
-  </foreach>
-  </insert>
+  <insert id="save" parameterType="com.ivtech.qaii.pojo.SysRole">
+    insert into sys_role (available,description,role)
+    values(#{available,jdbcType=BIT},#{description,jdbcType=VARCHAR},#{role,jdbcType=VARCHAR})
+</insert>
   <insert id="insertSelective" parameterType="com.ivtech.qaii.pojo.SysRole" >
     insert into sys_role
     <trim prefix="(" suffix=")" suffixOverrides="," >

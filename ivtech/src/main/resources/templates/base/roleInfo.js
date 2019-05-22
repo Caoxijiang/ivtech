@@ -50,7 +50,6 @@ $(function(){
 				"aoColumnDefs": [
 	              {
 						"mRender": function (data, type,row ) {
-							console.log(row)
 							var html = "";
 	                        html += "<a herf='#' id='"+row.id+"' style='cursor: pointer;' class='updateState1'>删除</a>  | ";
 	                        html += "<a herf='#' id='"+row.id+"' style='cursor: pointer;' class='updateRole'>修改</a> | "+
@@ -202,6 +201,7 @@ $(function(){
 			dataType: "json",
 			data : {},
 			success: function (res) {
+			    console.log("ssss:"+JSON.stringify(res));
 				$.ajax({
 					type: 'post',
 					url: '../roleInfo/findBypermission',
@@ -210,6 +210,7 @@ $(function(){
 						id : id
 					},
 					success: function (data) {
+						console.log(data)
 						var selectData = data.data;
 						var jsonstr="[]";
                         var jsonarray = eval('('+jsonstr+')');

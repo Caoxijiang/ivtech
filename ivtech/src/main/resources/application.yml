@@ -30,7 +30,7 @@ spring:
   static-path-pattern: /**
 
  datasource:
-  url: jdbc:mysql://localhost:3306/ivtech?serverTimezone=GMT%2B8&useSSL=false
+  url: jdbc:mysql://192.168.3.117:3306/ivtech?serverTimezone=GMT%2B8&useSSL=false
   username: root
   password: 123456
     # 使用druid数据源
