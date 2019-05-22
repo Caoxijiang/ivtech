@@ -69,20 +69,23 @@ public class SysPermissionController extends BaseController {
     public ModelMap sysPermissionAdd(SysPermission sp){
     	logger.info("添加资源："+sp.getName());
     	logger.info("添加资源parentId："+sp.getParentId());
-    	SysPermission result = null;
+    	int result;
     	result = sysPermissionService.save(sp);
-    	if( result!=null ){
+    	if( result>0 ){
     		return getModelMap(StateParameter.SUCCESS,result,"添加资源成功");
     	}else{
     		return getModelMap(StateParameter.FAULT,null,"添加资源失败");
     	}
        
     }
+
+
+
  
     
     
     /**
-     * 用户更新
+     * 资源更新
      * @return
      */
     @RequestMapping("/updatePermission")
@@ -123,7 +126,7 @@ public class SysPermissionController extends BaseController {
     
     
     /**
-     * 通过uid删除资源信息
+     * 通过id删除资源信息
      * @return
      */
     @RequestMapping("/delete")

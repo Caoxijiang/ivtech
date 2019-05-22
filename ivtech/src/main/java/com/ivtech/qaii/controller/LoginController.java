@@ -3,14 +3,17 @@ package com.ivtech.qaii.controller;
 import com.ivtech.qaii.pojo.UserInfo;
 import com.ivtech.qaii.util.Captcha;
 import com.ivtech.qaii.util.GifCaptcha;
+import com.ivtech.qaii.util.StateParameter;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -81,7 +84,7 @@ public class LoginController extends  BaseController{
 		return"/base/home";
 
 	}
-    
+	//@ResponseBody
     @RequestMapping("/loginUser")
     public String loginUser(HttpServletRequest request, String username, String password, String vcode) {
 
@@ -95,6 +98,7 @@ public class LoginController extends  BaseController{
 				logger.info("对用户[" + username + "]验证码不通过");
 				request.setAttribute("message", "验证码不正确");
 				return "/base/login";//返回登录页面
+				//return getModelMap(StateParameter.FAULT,null,"验证码不正确");
 			}
 
         	logger.info("进行账号"+username+",密码验证"+password+".....");
@@ -105,29 +109,35 @@ public class LoginController extends  BaseController{
         		UserInfo user=(UserInfo) subject.getPrincipal();
         		session.setAttribute("user", user);
         		session.setAttribute("clickId","home");
-        		return "/base/loadHome";
+				//return getModelMap(StateParameter.SUCCESS,user,"登陆成功");
+				return "/base/loadHome";
 	        }catch(UnknownAccountException uae){  
 	            logger.info("对用户[" + username + "]进行登录验证..验证未通过,未知账户");  
-	            request.setAttribute("message", "未知账户");  
+//	            request.setAttribute("message", "未知账户");
 	            return "/base/login";//返回登录页面
+				//return getModelMap(StateParameter.FAULT,null,"未知账户");
 	        }catch(IncorrectCredentialsException ice){  
 	            logger.info("对用户[" + username + "]进行登录验证..验证未通过,错误的凭证");  
-	            request.setAttribute("message", "密码不正确");  
+//	            request.setAttribute("message", "密码不正确");
 	            return "/base/login";//返回登录页面
+				//return getModelMap(StateParameter.FAULT,null,"密码不正确");
 	        }catch(LockedAccountException lae){  
 	            logger.info("对用户[" + username + "]进行登录验证..验证未通过,账户已锁定");  
-	            request.setAttribute("message", "账户已锁定");
-	            return "/base/login";//返回登录页面
+//	            request.setAttribute("message", "账户已锁定");
+            return "/base/login";//返回登录页面
+			//	return getModelMap(StateParameter.FAULT,null,"账户已锁定");
 	        }catch(ExcessiveAttemptsException eae){  
 	            logger.info("对用户[" + username + "]进行登录验证..验证未通过,错误次数过多");  
-	            request.setAttribute("message", "用户名或密码错误次数过多");
+	            //request.setAttribute("message", "用户名或密码错误次数过多");
 	            return "/base/login";//返回登录页面
+				//return getModelMap(StateParameter.FAULT,null,"用户名或密码错误次数过多");
 	        }catch(AuthenticationException ae){  
 	            //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景  
 	            logger.info("对用户[" + username + "]进行登录验证..验证未通过,堆栈轨迹如下");
 	            ae.printStackTrace();  
-	            request.setAttribute("message", "用户名或密码不正确");  
-	            return "/base/login";//返回登录页面
+	            request.setAttribute("message", "用户名或密码不正确");
+				//return getModelMap(StateParameter.FAULT,null,"添加角色失败");
+				return "/base/login";//返回登录页面
 	        }  
         
     }

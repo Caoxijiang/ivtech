@@ -1,16 +1,18 @@
 package com.ivtech.qaii.mapper;
 
+import com.ivtech.qaii.pojo.SysRole;
 import com.ivtech.qaii.pojo.UserInfo;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Param;
 
-import javax.validation.constraints.Null;
+import java.util.Date;
 import java.util.List;
 
 public interface UserInfoMapper {
     int deleteByPrimaryKey(Integer uid);
 
-    UserInfo save(UserInfo record);
+    Integer save(UserInfo record);
+
+    Integer saveRoleId(@Param("roles") UserInfo roles);
 
     int insertSelective(UserInfo record);
 
@@ -18,11 +20,16 @@ public interface UserInfoMapper {
 
     int updateByPrimaryKeySelective(UserInfo record);
 
-    int updateByPrimaryKey(UserInfo record);
+    int updateUserInfo(UserInfo record);
 
     UserInfo findByUsername(String name);
 
     UserInfo findByUid(Integer uid);
 
     List<UserInfo> findAll();
+
+    int updatePassword(@Param("password") String password,
+                       @Param("updateDate")Date updateDate,
+                       @Param("uid") String uid);
+
 }

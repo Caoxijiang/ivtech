@@ -3,7 +3,9 @@ package com.ivtech.qaii.controller;
 import com.ivtech.qaii.common.DataTablesParam;
 import com.ivtech.qaii.pojo.SysPermission;
 import com.ivtech.qaii.pojo.SysRole;
+import com.ivtech.qaii.pojo.SysRolePermission;
 import com.ivtech.qaii.service.SysPermissionService;
+import com.ivtech.qaii.service.SysRolePermissionService;
 import com.ivtech.qaii.service.SysRoleService;
 import com.ivtech.qaii.util.StateParameter;
 import net.sf.json.JSONArray;
@@ -20,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.management.relation.RoleInfo;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -33,6 +37,9 @@ public class SysRoleController extends BaseController {
 	
 	@Resource
 	SysPermissionService sysPermissionService;
+
+	@Resource
+	SysRolePermissionService sysRolePermissionService;
     /**
      * 角色查询.
      * @return
@@ -88,9 +95,9 @@ public class SysRoleController extends BaseController {
     @ResponseBody
     public ModelMap sysRoleAdd(SysRole sr){
     	logger.info("添加："+sr.getRole());
-    	SysRole result = null;
-    	result = sysRoleService.save(sr);
-    	if( result!=null ){
+    	Integer result;
+		result = sysRoleService.save(sr);
+    	if( result>0 ){
     		return getModelMap(StateParameter.SUCCESS,result,"添加角色成功");
     	}else{
     		return getModelMap(StateParameter.FAULT,null,"添加角色失败");
@@ -99,7 +106,7 @@ public class SysRoleController extends BaseController {
     }
     
     /**
-     * 角色角色
+     * 角色更新
      * @return
      */
     @RequestMapping("/updateRole")
@@ -156,7 +163,7 @@ public class SysRoleController extends BaseController {
     }
     
     /**
-     * 角色更新
+     * 查询所有角色
      * @return
      */
     @RequestMapping("/findAll")
@@ -210,20 +217,34 @@ public class SysRoleController extends BaseController {
     	logger.info("保存角色资源："+str);
     	try {
     		String [] array = str.split("-");
-    		List<SysPermission> list = new ArrayList<SysPermission>();
-    		for (int i = 0; i < array.length; i++) {
-    			SysPermission sr  = new SysPermission();
-    			sr.setId( Integer.parseInt(array[i]) );
-    			list.add(sr);
-			}
-    		SysRole srs = sysRoleService.findByOne(id);
-    		if(srs!=null){
-				srs.setPermissions(list);
-				SysRole result = sysRoleService.save(srs);
-				return getModelMap(StateParameter.SUCCESS,result.getId(),"操作成功");
+
+			SysRole srs = sysRoleService.findByOne(id);
+			List<SysRolePermission> list =new ArrayList<>();
+			if(srs!=null){
+				for (int i = 0; i < array.length; i++) {
+					SysRolePermission sr=new SysRolePermission();
+					sr.setPermissionId ( Integer.parseInt(array[i]) );
+					sr.setRoleId(srs.getId());
+					list.add(sr);
+				}
+
+				List<SysRolePermission> idlist=sysRolePermissionService.findidBypidAndrid(list);
+				for  ( int  i  =   0 ; i  <  list.size()  ; i ++ )   {
+					for  ( int  j  = 0; j<idlist.size() ;j ++ )   {
+						if  (list.get(i).getPermissionId()==idlist.get(j).getPermissionId()
+							&& list.get(i).getRoleId()==idlist.get(j).getRoleId()
+						)   {
+							list.get(i).setId(idlist.get(j).getId());
+						}
+					}
+				}
+				Integer result = sysRolePermissionService.save(list);
+				return getModelMap(StateParameter.SUCCESS,result,"操作成功");
 			}else{
 				return getModelMap(StateParameter.FAULT,null,"操作失败");
 			}
+				//srs.setPermissions(list);
+
 
 		} catch (Exception e) {
 			e.printStackTrace();

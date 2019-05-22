@@ -8,7 +8,7 @@ import java.util.List;
 public interface SysPermissionMapper {
     int delete(Integer id);
 
-    SysPermission save(SysPermission str);
+    int save(SysPermission str);
 
     int insertSelective(SysPermission record);
 

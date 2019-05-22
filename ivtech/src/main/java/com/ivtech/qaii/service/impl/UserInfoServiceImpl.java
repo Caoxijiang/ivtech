@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public UserInfo save(UserInfo ui) {
+    public Integer save(UserInfo ui) {
         String pas = MD5Utils.encodePassword(ui.getPassword(), ui.getCredentialsSalt());
         ui.setPassword(pas);
         return userInfoMapper.save(ui);
@@ -44,14 +45,29 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public UserInfo saveRoleId(UserInfo ui) {
+    public Integer saveRoleId(UserInfo ui) {
         // TODO Auto-generated method stub
-        return userInfoMapper.save(ui);
+        return userInfoMapper.saveRoleId(ui);
     }
 
     @Override
     public List<UserInfo> findAll() {
         return userInfoMapper.findAll();
+    }
+
+
+    @Override
+    public int updatePassword(String password, Date updateDate, String uid) {
+        // TODO Auto-generated method stub
+        int id = Integer.parseInt(uid);
+        UserInfo ui = userInfoMapper.findByUid(id);
+        String pas = MD5Utils.encodePassword(password, ui.getCredentialsSalt());
+        return userInfoMapper.updatePassword(pas, updateDate, uid);
+    }
+
+    @Override
+    public int updateUserInfo(UserInfo userInfo) {
+        return userInfoMapper.updateUserInfo(userInfo);
     }
 
 }

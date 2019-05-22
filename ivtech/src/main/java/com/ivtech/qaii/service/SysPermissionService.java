@@ -12,7 +12,7 @@ public interface SysPermissionService {
 	 List<SysPermissionVo> findAll();
 	
 	
-	SysPermission save(SysPermission sp);
+	int save(SysPermission sp);
 	
 	int updatePermission(SysPermission sp); 
 	

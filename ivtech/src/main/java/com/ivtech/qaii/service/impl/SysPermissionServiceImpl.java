@@ -45,7 +45,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
 	}
 
 	@Override
-	public SysPermission save(SysPermission sp) {
+	public int save(SysPermission sp) {
 		// TODO Auto-generated method stub
 		return sysPermissionMapper.save(sp);
 	}

@@ -15,7 +15,7 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/home")
 public class HomeController extends BaseController{
-
+	//获取用户当前登录状态信息
     @RequestMapping("/view")
     public String index(HttpServletResponse response){
 

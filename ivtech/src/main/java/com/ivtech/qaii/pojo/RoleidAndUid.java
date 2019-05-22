@@ -1,13 +1,11 @@
 package com.ivtech.qaii.pojo;
 
-import java.util.List;
-
-public class SysRolePermission {
-    private Integer permissionId;
-
-    private Integer  roleId;
-
+public class RoleidAndUid {
     private Integer id;
+
+    private Integer uid;
+
+    private Integer roleId;
 
     public Integer getId() {
         return id;
@@ -17,12 +15,12 @@ public class SysRolePermission {
         this.id = id;
     }
 
-    public Integer getPermissionId() {
-        return permissionId;
+    public Integer getUid() {
+        return uid;
     }
 
-    public void setPermissionId(Integer permissionId) {
-        this.permissionId = permissionId;
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 
     public Integer getRoleId() {

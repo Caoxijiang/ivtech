@@ -5,6 +5,7 @@ import com.ivtech.qaii.pojo.UserInfo;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface SysRoleService {
 	
@@ -21,10 +22,11 @@ public interface SysRoleService {
 	public int updateState(boolean available, String id);
 	
 	public int updateRole(SysRole sr);
-	
-	SysRole save(SysRole sr);
+
+	Integer save(SysRole sr);
 	    
-    
+
+
     public SysRole findByOne(String id);
     
     List<SysRole> findAll();

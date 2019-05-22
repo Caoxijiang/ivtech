@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("SysRoleService")
 public class SysRoleServiceImpl implements SysRoleService {
@@ -47,10 +48,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 		return 1;
 	}
 	@Override
-	public SysRole save(SysRole sr) {
+	public Integer save(SysRole sr) {
 		
 		return sysRoleMapper.save(sr);
 	}
+
 	@Override
 	public int updateRole(SysRole sr) {
 		// TODO Auto-generated method stub
